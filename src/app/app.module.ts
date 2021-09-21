@@ -2,13 +2,29 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
+import { ChordPracticeComponent } from './chord-practice/chord-practice.component';
+import {SliderModule} from 'primeng/slider';
+import {FormsModule} from "@angular/forms";
+import {PanelModule} from 'primeng/panel';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { NgxEchartsModule } from 'ngx-echarts';
+import {ButtonModule} from 'primeng/button';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ChordPracticeComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    SliderModule,
+    FormsModule,
+    PanelModule,
+    BrowserAnimationsModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts'),
+    }),
+    ButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
