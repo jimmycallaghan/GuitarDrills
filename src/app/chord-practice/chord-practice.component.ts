@@ -20,6 +20,7 @@ export class ChordPracticeComponent implements OnInit {
   flasherInterval: any;
   countdownInterval: any;
   prepTimeTimeout: any;
+  oneBeatTimeout: any;
 
   chords: string[] = [];
   selectedChords: string[] = this.chords.slice();
@@ -76,10 +77,12 @@ export class ChordPracticeComponent implements OnInit {
     this.chordService.removeOldDiagrams('1');
     this.chordService.removeOldDiagrams('2');
     this.isRunning = false;
+    this.isCooldownPhase = false;
     clearInterval(this.gettingReadyInterval);
     clearInterval(this.flasherInterval);
     clearInterval(this.countdownInterval);
     clearTimeout(this.prepTimeTimeout);
+    clearTimeout(this.oneBeatTimeout);
     this.isComboDialogVisible = false;
   }
 
@@ -93,7 +96,7 @@ export class ChordPracticeComponent implements OnInit {
     this.prepTimeTimeout = setTimeout(() => {
       this.isCooldownPhase = false;
       this.runCountInPhase().then(() => {
-        setTimeout(() => {  // Wait one beat before starting the flashes
+        this.oneBeatTimeout = setTimeout(() => {  // Wait one beat before starting the flashes
           this.flasherInterval = this.createFlasher();
           this.countdown--;
           this.countdownInterval = setInterval(() => {

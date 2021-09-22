@@ -28,7 +28,7 @@ export class ChordBoxImage {
 
   _imageWidth = 100;
   _imageHeight = 100;
-  _xstart = 0; //upper corner of the chordbox
+  _xstart = 50; //upper corner of the chordbox
   _ystart = 0;
   _nutHeight = 2;
 
@@ -225,13 +225,13 @@ export class ChordBoxImage {
         this.drawChordBox();
         this.drawBars();
         this.drawChordPositionsAndFingers();
-        this.drawChordName();
+        //this.drawChordName();
         this.drawStringNames();
       } else if (layout === '2') {
         this.drawChordBox();
         this.drawChordPositions();
         this.drawBars();
-        this.drawChordName();
+        //this.drawChordName();
         this.drawFingers();
       }
     }
