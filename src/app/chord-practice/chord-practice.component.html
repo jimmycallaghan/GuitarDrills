@@ -1,1 +1,149 @@
-<p>chord-practice works!</p>
+<p-dialog
+  [(visible)]="isComboDialogVisible"
+  [modal]="true"
+  (onHide)="stop()"
+  [breakpoints]="{'960px': '80vw', '640px': '100vw'}"
+  [style]="{width: '70vw'}"
+  [closeOnEscape]="false"
+  [closable]="false">
+  <ng-template pTemplate="header">
+    Header content here
+  </ng-template>
+  <p-panel header="Play These Chords">
+    <div *ngIf="isRunning">
+      <div class="card">
+        <span *ngIf="isCountInPhase">Getting Ready [{{countInWord}}]</span>
+        <span *ngIf="!isCountInPhase && !isCooldownPhase">Strums Left: {{countdown}}</span>
+        <span *ngIf="isCooldownPhase">Coming Next...</span>
+        <div class="flex
+                      flex-row
+                      flex-wrap
+                      card-container
+                      blue-container">
+          <div
+            class="flex
+              align-items-center
+              justify-content-center
+              w-12rem
+              h-12rem
+              {{chord1Class}}
+              font-bold
+              text-white
+              border-round
+              m-2">{{chordCombo.from}}</div>
+          <div
+            class="flex
+              align-items-center
+              justify-content-center
+              w-12rem
+              h-12rem
+              {{chord2Class}}
+              font-bold
+              text-white
+              border-round
+              m-2">{{chordCombo.to}}</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex
+                      flex-row
+                      flex-wrap
+                      card-container
+                      blue-container">
+          <div
+            class="flex
+              align-items-center
+              justify-content-center
+              w-12rem
+              h-12rem
+              border-round
+              m-2">
+            <app-chord-diagram [name]="chordCombo.from"
+                               [chordId]="1"
+                               [chordsChangedSubject]="chordsUpdatedSubject"></app-chord-diagram>
+          </div>
+          <div
+            class="flex
+              align-items-center
+              justify-content-center
+              w-12rem
+              h-12rem
+              border-round
+              m-2">
+            <app-chord-diagram [name]="chordCombo.to"
+                               [chordId]="2"
+                               [chordsChangedSubject]="chordsUpdatedSubject"></app-chord-diagram>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple
+            label="Stop"
+            icon="pi pi-times"
+            class="p-button-danger"
+            (click)="stop()"
+            *ngIf="isRunning"></button>
+  </ng-template>
+</p-dialog>
+
+
+<div class="grid">
+  <div class="col-12">
+    <p-panel header="Settings">
+      <ng-template pTemplate="icons">
+        <button pButton pRipple
+                label="Play"
+                icon="pi pi-play"
+                class="p-button-success"
+                (click)="start()"
+                *ngIf="!isRunning"></button>
+        <button pButton pRipple
+                label="Stop"
+                icon="pi pi-times"
+                class="p-button-danger"
+                (click)="stop()"
+                *ngIf="isRunning"></button>
+      </ng-template>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <h5>BPM: {{bpm}}</h5>
+          <p-slider [(ngModel)]="bpm" [min]="50" [max]="120"></p-slider>
+
+          <h5>Repeat Combo: {{repeatComboCount}}</h5>
+          <p-slider [(ngModel)]="repeatComboCount" [min]="2" [max]="20"></p-slider>
+
+          <h5>Strums per Chord: {{barsPerChord}}</h5>
+          <p-slider [(ngModel)]="barsPerChord" [min]="3" [max]="20"></p-slider>
+        </div>
+        <div class="col-12 md:col-6">
+          <h5>Chords To Include in Drill</h5>
+          <div class="formgroup-inline">
+            <div class="field-checkbox" *ngFor="let chord of chords">
+              <p-checkbox name="group1" [value]="chord" [(ngModel)]="selectedChords" [inputId]="chord"></p-checkbox>
+              <label [for]="chord">{{chord}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-panel>
+  </div>
+  <div class="col-12">
+    <p-panel header="What You've Played">
+      <div echarts [options]="chartOption" class="demo-chart"></div>
+    </p-panel>
+  </div>
+  <div class="col-12">
+    <p-panel header="Combinations played so far">
+      <div class="card" *ngFor="let obj of playedSoFar">
+        <div class="flex flex-row flex-wrap card-container blue-container">
+          <div
+            class="flex align-items-center justify-content-center w-4rem h-4rem bg-cyan-500 font-bold text-white border-round m-2">{{obj.from}}</div>
+          <div
+            class="flex align-items-center justify-content-center w-4rem h-4rem bg-cyan-500 font-bold text-white border-round m-2">{{obj.to}}</div>
+        </div>
+      </div>
+    </p-panel>
+  </div>
+</div>

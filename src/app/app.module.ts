@@ -9,14 +9,20 @@ import {PanelModule} from 'primeng/panel';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { NgxEchartsModule } from 'ngx-echarts';
 import {ButtonModule} from 'primeng/button';
+import {DialogModule} from 'primeng/dialog';
+import {CheckboxModule} from 'primeng/checkbox';
+import { ChordDiagramComponent } from './chord-diagram/chord-diagram.component';
+import {AppRoutingModule} from "../../../GuitarPractice/src/app/app-routing.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChordPracticeComponent
+    ChordPracticeComponent,
+    ChordDiagramComponent
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     SliderModule,
     FormsModule,
     PanelModule,
@@ -24,7 +30,9 @@ import {ButtonModule} from 'primeng/button';
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     }),
-    ButtonModule
+    ButtonModule,
+    DialogModule,
+    CheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]
