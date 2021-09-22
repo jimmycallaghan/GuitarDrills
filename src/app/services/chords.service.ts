@@ -12,7 +12,7 @@ export class ChordsService {
     new ChordDefinition('A', 'x02220', '--123-'),
     new ChordDefinition('Am', 'x02210', '--321-'),
     new ChordDefinition('B', 'xx4442', '--4442'),
-    new ChordDefinition('Bm', 'xx4442', '--4432'),
+    new ChordDefinition('Bm', 'xx4432', '--3421'),
     new ChordDefinition('C', 'x32010', '-32-1-'),
     new ChordDefinition('D', 'xx0232', '---132'),
     new ChordDefinition('Dm', 'xx0231', '---231'),
