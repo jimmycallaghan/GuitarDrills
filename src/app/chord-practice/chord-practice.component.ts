@@ -11,9 +11,12 @@ export class ChordPracticeComponent implements OnInit {
 
   title = 'GuitarPractice';
 
+  // Stuff that can be changed by the user
   bpm = 70;
-  barsPerChord = 4;
-  repeatComboCount = 3;
+  barsPerChord = 8;
+  repeatComboCount = 4;
+  numberOfChords = 2;
+
   prepTime = 5; // seconds
 
   gettingReadyInterval: any;
@@ -66,7 +69,7 @@ export class ChordPracticeComponent implements OnInit {
 
   public start(): void {
     this.isRunning = true;
-    this.countdown = this.barsPerChord * 2 * this.repeatComboCount;
+    this.resetCountdown();
     this.timeBetweenBeats = (60 / this.bpm) * 1000;
     this.isComboDialogVisible = true;
     this.init();
@@ -105,9 +108,10 @@ export class ChordPracticeComponent implements OnInit {
           this.countdownInterval = setInterval(() => {
             this.countdown--;
             if (this.countdown <= 0) {
-              this.countdown = this.barsPerChord * 4;
               clearInterval(this.flasherInterval);
               clearInterval(this.countdownInterval);
+
+              this.resetCountdown();
 
               this.playedSoFar.unshift(this.chordCombo);
               this.updatePlayedSoFarFrequency(this.chordCombo.from);
@@ -223,6 +227,10 @@ export class ChordPracticeComponent implements OnInit {
         },
       ],
     };
+  }
+
+  resetCountdown(): void {
+    this.countdown = this.barsPerChord * this.numberOfChords * this.repeatComboCount;
   }
 
 }
