@@ -12,7 +12,7 @@ import {ButtonModule} from 'primeng/button';
 import {DialogModule} from 'primeng/dialog';
 import {CheckboxModule} from 'primeng/checkbox';
 import { ChordDiagramComponent } from './chord-diagram/chord-diagram.component';
-import {AppRoutingModule} from "../../../GuitarPractice/src/app/app-routing.module";
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
   declarations: [
