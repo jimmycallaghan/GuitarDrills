@@ -73,16 +73,19 @@ export class ChordPracticeComponent implements OnInit {
   }
 
   public stop(): void {
-    console.log('stop()');
-    this.chordService.removeOldDiagrams('1');
-    this.chordService.removeOldDiagrams('2');
     this.isRunning = false;
     this.isCooldownPhase = false;
+    this.isCountInPhase = false;
+
+    this.chordService.removeOldDiagrams('1');
+    this.chordService.removeOldDiagrams('2');
+
     clearInterval(this.gettingReadyInterval);
     clearInterval(this.flasherInterval);
     clearInterval(this.countdownInterval);
     clearTimeout(this.prepTimeTimeout);
     clearTimeout(this.oneBeatTimeout);
+
     this.isComboDialogVisible = false;
   }
 
