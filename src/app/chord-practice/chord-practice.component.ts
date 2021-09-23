@@ -105,6 +105,7 @@ export class ChordPracticeComponent implements OnInit {
         this.oneBeatTimeout = setTimeout(() => {  // Wait one beat before starting the flashes
           this.flasherInterval = this.createFlasher();
           this.countdown--;
+          this.playSnare();
           this.countdownInterval = setInterval(() => {
             this.countdown--;
             if (this.countdown <= 0) {
@@ -133,9 +134,12 @@ export class ChordPracticeComponent implements OnInit {
 
       let countInIndex = 0;
       this.countInWord = this.countIn[countInIndex];
+      this.playSnare();
+
       this.gettingReadyInterval = setInterval(() => {
         countInIndex ++;
         this.countInWord = this.countIn[countInIndex];
+        this.playSnare();
         if (countInIndex === this.countIn.length - 1) {
           clearInterval(this.gettingReadyInterval);
           this.isCountInPhase = false;
@@ -185,6 +189,8 @@ export class ChordPracticeComponent implements OnInit {
         this.flashChord2();
       }
 
+      this.playSnare();
+
       strumsLeft --;
       if (strumsLeft === 0) {
         strumsLeft = this.barsPerChord;
@@ -231,6 +237,12 @@ export class ChordPracticeComponent implements OnInit {
 
   resetCountdown(): void {
     this.countdown = this.barsPerChord * this.numberOfChords * this.repeatComboCount;
+  }
+
+  playSnare(): void {
+    let src = '/assets/snare.mp3';
+    let audio = new Audio(src);
+    audio.play();
   }
 
 }
