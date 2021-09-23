@@ -3,75 +3,59 @@
   [modal]="true"
   (onHide)="stop()"
   [breakpoints]="{'960px': '80vw', '640px': '100vw'}"
-  [style]="{width: '70vw'}"
+  [style]="{width: '70vw', height: '80vh'}"
   [closeOnEscape]="false"
   [closable]="false">
-  <ng-template pTemplate="header">
-    Header content here
-  </ng-template>
   <p-panel>
     <ng-template pTemplate="header">
       <span *ngIf="isCountInPhase">Count In... {{countInWord}}</span>
       <span *ngIf="!isCountInPhase && !isCooldownPhase">Strums Left: {{countdown}}</span>
-      <span *ngIf="isCooldownPhase">Next Chord Pair...</span>
+      <span *ngIf="isCooldownPhase">Next Chord Pair (5 second pause)...</span>
     </ng-template>
     <div *ngIf="isRunning">
-        <div class="flex flex-row justify-content-between">
-          <div
-            class="flex
-              align-items-center
-              justify-content-center
-              w-12rem
-              h-12rem
-              {{chord1Class}}
-              font-bold
-              text-white
-              border-round
-              text-5xl
-              m-2">{{chordCombo.from}}</div>
-          <div
-            class="flex
-              align-items-center
-              justify-content-center
-              w-12rem
-              h-12rem
-              {{chord2Class}}
-              font-bold
-              text-white
-              border-round
-              text-5xl
-              m-2">{{chordCombo.to}}</div>
+      <div class="grid">
+        <div class="col-6">
+          <div class="flex flex-row justify-content-between">
+            <div id="firstChord"
+                 class="flex
+                 align-items-center
+                justify-content-center
+                w-10rem
+                h-10rem
+                {{chord1Class}}
+                font-bold
+                text-white
+                border-round
+                text-5xl
+                m-2">{{chordCombo.from}}</div>
+          </div>
+        </div>
+        <div class="col-6">
+            <div id="secondChord"
+                 class="flex
+                 align-items-center
+                justify-content-center
+                w-10rem
+                h-10rem
+                {{chord2Class}}
+                font-bold
+                text-white
+                border-round
+                text-5xl
+                m-2">{{chordCombo.to}}</div>
+        </div>
+        <div class="col-6">
+          <app-chord-diagram [name]="chordCombo.from"
+                             [chordId]="1"
+                             [chordsChangedSubject]="chordsUpdatedSubject"></app-chord-diagram>
+        </div>
+        <div class="col-6">
+          <app-chord-diagram [name]="chordCombo.to"
+                             [chordId]="2"
+                             [chordsChangedSubject]="chordsUpdatedSubject"></app-chord-diagram>
         </div>
       </div>
-        <div class="flex flex-row justify-content-between">
-          <div
-            class="flex
-              align-items-center
-              justify-content-center
-              w-12rem
-              h-12rem
-              border-round
-              m-2
-              ml-5">
-            <app-chord-diagram [name]="chordCombo.from"
-                               [chordId]="1"
-                               [chordsChangedSubject]="chordsUpdatedSubject"></app-chord-diagram>
-          </div>
-          <div
-            class="flex
-              align-items-center
-              justify-content-center
-              w-12rem
-              h-12rem
-              border-round
-              m-2">
-            <div class="ml-6"> <!-- Need a little padding to get it centered-->
-              <app-chord-diagram [name]="chordCombo.to"
-                               [chordId]="2"
-                               [chordsChangedSubject]="chordsUpdatedSubject"></app-chord-diagram>
-            </div>
-          </div>
-        </div>
+    </div>
   </p-panel>
   <ng-template pTemplate="footer">
     <button pButton pRipple
