@@ -11,7 +11,7 @@ export class ChordsService {
   chords: ChordDefinition[] = [
     new ChordDefinition('A', 'x02220', '--123-'),
     new ChordDefinition('Am', 'x02210', '--321-'),
-    new ChordDefinition('B', 'xx4442', '--4442'),
+    new ChordDefinition('B', 'xx4442', '--4321'),
     new ChordDefinition('Bm', 'xx4432', '--3421'),
     new ChordDefinition('C', 'x32010', '-32-1-'),
     new ChordDefinition('D', 'xx0232', '---132'),
