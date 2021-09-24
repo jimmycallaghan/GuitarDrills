@@ -68,7 +68,7 @@ export class ChordPracticeComponent implements OnInit {
     });
 
     this.howl.register('dev', {
-      src: ['/assets/snare.mp3'],
+      src: ['assets/snare.mp3'],
       html5: true
     }).subscribe(status => {
       // ok
