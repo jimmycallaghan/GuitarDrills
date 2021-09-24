@@ -242,7 +242,12 @@ export class ChordPracticeComponent implements OnInit {
   playSnare(): void {
     let src = '/assets/snare.mp3';
     let audio = new Audio(src);
-    audio.play();
+    audio.crossOrigin = 'anonymous';
+    audio.play().then(() => {
+      // Playback was OK
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
 }
