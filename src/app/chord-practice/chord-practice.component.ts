@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ChordsService} from "../services/chords.service";
 import {Subject} from "rxjs";
+import {NgxHowlerService} from "ngx-howler";
 
 @Component({
   selector: 'app-chord-practice',
@@ -56,7 +57,8 @@ export class ChordPracticeComponent implements OnInit {
 
   chordsUpdatedSubject = new Subject<void>();
 
-  constructor(private chordService: ChordsService) {}
+  constructor(private chordService: ChordsService,
+              private howl: NgxHowlerService) {}
 
   ngOnInit(): void {
     this.chords = this.chordService.chords.map(chord => chord.name);
@@ -64,6 +66,14 @@ export class ChordPracticeComponent implements OnInit {
     this.chords.forEach(chord => {
       this.playedSoFarFrequency.push({chord, frequency: 0});
     });
+
+    this.howl.register('dev', {
+      src: ['/assets/snare.mp3'],
+      html5: true
+    }).subscribe(status => {
+      // ok
+    });
+
     this.updateChart();
   }
 
@@ -240,14 +250,17 @@ export class ChordPracticeComponent implements OnInit {
   }
 
   playSnare(): void {
+    /*
     let src = '/assets/snare.mp3';
     let audio = new Audio(src);
     audio.crossOrigin = 'anonymous';
     audio.play().then(() => {
       // Playback was OK
-    }).catch(error => {
+    }, error => {
       console.log(error);
     });
+    */
+    this.howl.get('dev').play();
   }
 
 }

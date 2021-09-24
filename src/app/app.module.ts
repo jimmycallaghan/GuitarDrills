@@ -13,6 +13,7 @@ import {DialogModule} from 'primeng/dialog';
 import {CheckboxModule} from 'primeng/checkbox';
 import { ChordDiagramComponent } from './chord-diagram/chord-diagram.component';
 import {AppRoutingModule} from "./app-routing.module";
+import {NgxHowlerService} from "ngx-howler";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,13 @@ import {AppRoutingModule} from "./app-routing.module";
     DialogModule,
     CheckboxModule
   ],
-  providers: [],
+  providers: [NgxHowlerService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(
+    ngxHowlerService: NgxHowlerService
+  ) {
+    ngxHowlerService.loadScript('https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js');
+  }
+}
