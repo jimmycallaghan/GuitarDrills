@@ -57,8 +57,8 @@ export class ChordPracticeComponent implements OnInit {
 
   chordsUpdatedSubject = new Subject<void>();
 
-  constructor(private chordService: ChordsService,
-              private howl: NgxHowlerService) {}
+  constructor(private chordService: ChordsService/*,
+              private howl: NgxHowlerService*/) {}
 
   ngOnInit(): void {
     this.chords = this.chordService.chords.map(chord => chord.name);
@@ -67,12 +67,14 @@ export class ChordPracticeComponent implements OnInit {
       this.playedSoFarFrequency.push({chord, frequency: 0});
     });
 
+    /*
     this.howl.register('dev', {
       src: ['assets/snare.mp3'],
       html5: true
     }).subscribe(status => {
       // ok
     });
+     */
 
     this.updateChart();
   }
@@ -250,8 +252,8 @@ export class ChordPracticeComponent implements OnInit {
   }
 
   playSnare(): void {
-    /*
-    let src = '/assets/snare.mp3';
+
+    let src = 'assets/snare.mp3';
     let audio = new Audio(src);
     audio.crossOrigin = 'anonymous';
     audio.play().then(() => {
@@ -259,8 +261,8 @@ export class ChordPracticeComponent implements OnInit {
     }, error => {
       console.log(error);
     });
-    */
-    this.howl.get('dev').play();
+
+    // this.howl.get('dev').play();
   }
 
 }
