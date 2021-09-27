@@ -27,7 +27,7 @@ export class ChordPracticeComponent implements OnInit {
   oneBeatTimeout: any;
 
   chords: string[] = [];
-  selectedChords: string[] = this.chords.slice();
+  selectedChords: string[] | undefined = this.chords.slice();
   chordCombo: { from: string, to: string } = {from: 'D', to: 'C'};
 
   chordColor0 = 'bg-blue-500';
@@ -57,11 +57,18 @@ export class ChordPracticeComponent implements OnInit {
 
   chordsUpdatedSubject = new Subject<void>();
 
-  constructor(private chordService: ChordsService/*,
-              private howl: NgxHowlerService*/) {}
+  selectedKey: string = '';
+  keys: string[] = [];
+
+  constructor(private chordService: ChordsService) {
+    chordService.keys.forEach((chords, key) => {
+      this.keys.push(key);
+    });
+    this.chords = this.chordService.chords.map(chord => chord.name);
+  }
 
   ngOnInit(): void {
-    this.chords = this.chordService.chords.map(chord => chord.name);
+
     this.selectedChords = this.chords.slice();
     this.chords.forEach(chord => {
       this.playedSoFarFrequency.push({chord, frequency: 0});
@@ -162,6 +169,12 @@ export class ChordPracticeComponent implements OnInit {
   }
 
   private createChordPair(): void {
+
+    if (!this.selectedChords) {
+      console.log('No chords selected');
+      return;
+    }
+
     const fromInt = this.getRandomInt(this.selectedChords.length);
     const toInt = this.getRandomInt(this.selectedChords.length);
     if (fromInt === toInt) {
@@ -185,17 +198,20 @@ export class ChordPracticeComponent implements OnInit {
     }
   }
 
+  leftToPlay = this.barsPerChord;
+  chordBeingPlayed = 1;
+
   private createFlasher(): any {
 
-    let strumsLeft = this.barsPerChord;
-    let chordToFlash = 1;
+    this.leftToPlay = this.barsPerChord;
+    this.chordBeingPlayed = 1;
 
     this.flashChord1();
-    strumsLeft --;
+    this.leftToPlay --;
 
     return setInterval(() => {
 
-      if (chordToFlash === 1) {
+      if (this.chordBeingPlayed === 1) {
         this.flashChord1();
       } else {
         this.flashChord2();
@@ -203,10 +219,10 @@ export class ChordPracticeComponent implements OnInit {
 
       this.playSnare();
 
-      strumsLeft --;
-      if (strumsLeft === 0) {
-        strumsLeft = this.barsPerChord;
-        chordToFlash = chordToFlash === 1 ? 2 : 1;
+      this.leftToPlay --;
+      if (this.leftToPlay === 0) {
+        this.leftToPlay = this.barsPerChord;
+        this.chordBeingPlayed = this.chordBeingPlayed === 1 ? 2 : 1;
       }
     }, this.timeBetweenBeats);
   }
@@ -263,6 +279,10 @@ export class ChordPracticeComponent implements OnInit {
     });
 
     // this.howl.get('dev').play();
+  }
+
+  onKeySelect(): void {
+    this.selectedChords = this.chordService.keys.get(this.selectedKey)?.map(cd => cd.name);
   }
 
 }

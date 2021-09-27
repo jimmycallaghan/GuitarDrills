@@ -14,6 +14,8 @@ import {CheckboxModule} from 'primeng/checkbox';
 import { ChordDiagramComponent } from './chord-diagram/chord-diagram.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {NgxHowlerService} from "ngx-howler";
+import {SelectButtonModule} from 'primeng/selectbutton';
+import {FieldsetModule} from 'primeng/fieldset';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import {NgxHowlerService} from "ngx-howler";
     }),
     ButtonModule,
     DialogModule,
-    CheckboxModule
+    CheckboxModule,
+    SelectButtonModule,
+    FieldsetModule
   ],
   providers: [NgxHowlerService],
   bootstrap: [AppComponent]

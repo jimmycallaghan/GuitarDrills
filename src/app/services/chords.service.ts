@@ -19,10 +19,18 @@ export class ChordsService {
     new ChordDefinition('E', '022100', '-231--'),
     new ChordDefinition('Em', '022000', '-23---'),
     new ChordDefinition('F', 'xx3211', '--3211'),
+    new ChordDefinition('F#m', 'x13321', '-13421'),
     new ChordDefinition('G', '320003', '32---4')
   ];
 
   chordsBeingPlayed: Map<number, ChordDefinition> = new Map();
+  keys: Map<string, ChordDefinition[]> = new Map();
+
+  constructor() {
+    this.keys.set('G', this.getChordsFor(['G', 'Am', 'Bm', 'C', 'D', 'Em']));
+    this.keys.set('C', this.getChordsFor(['C', 'Dm', 'Em', 'F', 'G', 'Am']));
+    this.keys.set('D', this.getChordsFor(['D', 'Em', 'F#m', 'G', 'A', 'Bm']));
+  }
 
   public updateChordsBeingPlayed(chords: {chordId: number, chordName: string}[]) {
     this.chordsBeingPlayed = new Map();
@@ -57,6 +65,10 @@ export class ChordsService {
       // @ts-ignore
       els.parentNode.removeChild(els);
     });
+  }
+
+  getChordsFor(chords: string[]): ChordDefinition[] {
+      return chords.map(name => this.getChordByName(name));
   }
 
 }
