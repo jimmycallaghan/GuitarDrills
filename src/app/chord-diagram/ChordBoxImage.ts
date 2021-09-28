@@ -268,7 +268,8 @@ export class ChordBoxImage {
   };
 
   drawBars() {
-    let bars = new Map<string, { 'Str': number, 'Pos': number, 'Length': number, 'Finger': string }>();
+    let bars = new Map<string, { startString: number, fret: number, numberOfFrets: number, finger: string }>();
+
 
     for (let i = 0; i < 5; i++) {
       if (this._chordPositions[i] != this.MUTED &&
@@ -276,26 +277,27 @@ export class ChordBoxImage {
         this._fingers[i] != this.NO_FINGER &&
         !bars.hasOwnProperty(this._fingers[i])) {
 
-        let bar = { 'Str':i, 'Pos':this._chordPositions[i], 'Length': 0, 'Finger': this._fingers[i] };
+        let bar = { startString: i, fret: this._chordPositions[i], numberOfFrets: 0, finger: this._fingers[i] };
 
         for (var j = i + 1; j < 6; j++) {
-          if (this._fingers[j] == bar['Finger'] && this._chordPositions[j] == this._chordPositions[i]) {
-            bar['Length'] = j - i;
+          if (this._fingers[j] == bar.finger && this._chordPositions[j] == this._chordPositions[i]) {
+            bar.numberOfFrets = j - bar.startString;
           }
         }
 
-        if (bar.Length > 0) {
-          bars.set(bar.Finger, bar);
+        if (bar.numberOfFrets > 0) {
+          bars.set(bar.finger, bar);
         }
       }
     }
 
+    console.log(bars);
+
     var totalFretWidth = this._fretWidth + this._lineWidth;
     for (let [finger, bar] of bars) {
-        console.log('if');
-        let xstart = this._xstart + bar['Str'] * totalFretWidth;
-        let xend = xstart + bar['Length'] * totalFretWidth;
-        let y = this._ystart + (bar['Pos'] - this._baseFret + 1) * totalFretWidth - (totalFretWidth / 2);
+        let xstart = this._xstart + bar.startString * totalFretWidth;
+        let xend = xstart + bar.numberOfFrets * totalFretWidth;
+        let y = this._ystart + (bar.fret - this._baseFret + 1) * totalFretWidth - (totalFretWidth / 2);
         this.drawLine(this._foregroundBrush, this._dotWidth / 2, xstart, y, xend, y);
     }
   };

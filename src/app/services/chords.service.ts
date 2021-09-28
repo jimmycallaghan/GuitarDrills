@@ -20,8 +20,9 @@ export class ChordsService {
     new ChordDefinition('E', '022100', '-231--'),
     new ChordDefinition('Em', '022000', '-23---'),
     new ChordDefinition('F', 'xx3211', '--3211'),
-    new ChordDefinition('F#m', 'x13321', '-13421'),
-    new ChordDefinition('G', '320003', '32---4')
+    new ChordDefinition('F#m', '244222', '134--1'),
+    new ChordDefinition('G', '320003', '32---4'),
+    new ChordDefinition('G#m', '466444', '134111')
   ];
 
   chordsBeingPlayed: Map<number, ChordDefinition> = new Map();
@@ -31,6 +32,7 @@ export class ChordsService {
     this.keys.set('A', this.getChordsFor(['A', 'Bm', 'C#m', 'D', 'E', 'F#m']));
     this.keys.set('C', this.getChordsFor(['C', 'Dm', 'Em', 'F', 'G', 'Am']));
     this.keys.set('D', this.getChordsFor(['D', 'Em', 'F#m', 'G', 'A', 'Bm']));
+    this.keys.set('E', this.getChordsFor(['E', 'F#m', 'G#m', 'A', 'B', 'C#m']));
     this.keys.set('G', this.getChordsFor(['G', 'Am', 'Bm', 'C', 'D', 'Em']));
   }
 
