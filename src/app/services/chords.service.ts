@@ -12,8 +12,9 @@ export class ChordsService {
     new ChordDefinition('A', 'x02220', '--123-'),
     new ChordDefinition('Am', 'x02210', '--321-'),
     new ChordDefinition('B', 'xx4442', '--4321'),
-    new ChordDefinition('Bm', 'xx4432', '--3421'),
+    new ChordDefinition('Bm', 'x24432', '-13421'),
     new ChordDefinition('C', 'x32010', '-32-1-'),
+    new ChordDefinition('C#m', 'x46654', '-13421'),
     new ChordDefinition('D', 'xx0232', '---132'),
     new ChordDefinition('Dm', 'xx0231', '---231'),
     new ChordDefinition('E', '022100', '-231--'),
@@ -27,9 +28,10 @@ export class ChordsService {
   keys: Map<string, ChordDefinition[]> = new Map();
 
   constructor() {
-    this.keys.set('G', this.getChordsFor(['G', 'Am', 'Bm', 'C', 'D', 'Em']));
+    this.keys.set('A', this.getChordsFor(['A', 'Bm', 'C#m', 'D', 'E', 'F#m']));
     this.keys.set('C', this.getChordsFor(['C', 'Dm', 'Em', 'F', 'G', 'Am']));
     this.keys.set('D', this.getChordsFor(['D', 'Em', 'F#m', 'G', 'A', 'Bm']));
+    this.keys.set('G', this.getChordsFor(['G', 'Am', 'Bm', 'C', 'D', 'Em']));
   }
 
   public updateChordsBeingPlayed(chords: {chordId: number, chordName: string}[]) {

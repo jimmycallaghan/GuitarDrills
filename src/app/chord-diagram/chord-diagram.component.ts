@@ -76,12 +76,11 @@ export class ChordDiagramComponent implements OnInit, AfterViewInit {
 
   generateChordHtml(name: string, positions: string, fingering: string, size: string, layout: string, stringNames: string) {
     if (positions.length != 6 || fingering.length != 6) {
-      console.error('ChordJS cannot generate a chord diagram from invalid chord input! (Too many positions or fingers.');
-      console.log('ChordJS will render an empty chord instead!');
+      console.error('Invalid chord input!');
       positions = 'xxxxxx';
       fingering = '------';
     }
-    let chordObj = new ChordBoxImage(name, positions, fingering, size, stringNames);
+    let chordObj = new ChordBoxImage(name, positions, fingering, size, stringNames, false);
     let canvas = document.createElement('canvas');
     canvas.setAttribute('class', 'rendered-chord');
     canvas.setAttribute('chordid', this.chordId + '');

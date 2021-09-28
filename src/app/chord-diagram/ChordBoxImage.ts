@@ -12,7 +12,6 @@ export class ChordBoxImage {
   FONT_NAME = "Arial";
 
   _ctx: any;
-  //Fields
 
   _size = 12;
   _chordPositions: number[] = [];
@@ -49,11 +48,20 @@ export class ChordBoxImage {
   _baseFret = 1;
   _guitarStringFontSize = this._fretWidth * 0.8;
 
-  constructor(name: string, chord: string, fingers: string, size: string, stringNames: string) {
+  isShowChordName = true;
+
+  constructor(name: string,
+              chord: string,
+              fingers: string,
+              size: string,
+              stringNames: string,
+              showChordName: boolean) {
 
     if (stringNames) {
       this._stringNames = stringNames;
     }
+
+    this.isShowChordName = showChordName;
 
     //MAIN
     if (name == null || typeof name == 'undefined') {
@@ -65,6 +73,32 @@ export class ChordBoxImage {
     this.parseFingers(fingers);
     this.parseSize(size);
     this.initializeSizes();
+  };
+
+  createImage(ctx: any, layout: string) {
+    this._ctx = ctx;
+    this.fillRectangle(this._backgroundBrush, 0, 0, this._imageWidth, this._imageHeight);
+    if (this._error) {
+      this.drawLine('red', 3, 0, 0, this._imageWidth, this._imageHeight);
+      this.drawLine('red', 3, 0, this._imageHeight, this._imageWidth, 0);
+    } else {
+      if (typeof layout === 'undefined' || layout === '1') {
+        this.drawChordBox();
+        this.drawBars();
+        this.drawChordPositionsAndFingers();
+        this.drawBaseFret();
+        this.drawStringNames();
+      } else if (layout === '2') {
+        this.drawChordBox();
+        this.drawChordPositions();
+        this.drawBars();
+        this.drawBaseFret();
+        this.drawFingers();
+      }
+      if (this.isShowChordName) {
+        this.drawChordName();
+      }
+    }
   };
 
   pen(color: string, size: number) {
@@ -132,10 +166,6 @@ export class ChordBoxImage {
     this._boxWidth = 5 * this._fretWidth + 6 * this._lineWidth;
     this._boxHeight = this.FRET_COUNT * (this._fretWidth + this._lineWidth) + this._lineWidth;
 
-    //Find out font sizes
-    //TODO: calculate perc via CSS
-    //FontFamily family = new FontFamily(FONT_NAME);
-    //perc = family.GetCellAscent(FontStyle.Regular) / family.GetLineSpacing(FontStyle.Regular);
     let perc = 0.8;
     this._fretFontSize = this._fretWidth / perc;
     this._fingerFontSize = this._fretWidth * 0.8;
@@ -150,10 +180,16 @@ export class ChordBoxImage {
     }
 
     this._xstart = this._fretWidth;
-    this._ystart = Math.round(0.2 * this._superScriptFontSize + this._nameFontSize + this._nutHeight + 1.7 * this._markerWidth);
+    if (this.isShowChordName) {
+      this._ystart = Math.round(0.2 * this._superScriptFontSize + this._nameFontSize + this._nutHeight + 1.7 * this._markerWidth);
+    } else {
+      this._ystart = this._nutHeight + 1.7 * this._markerWidth;
+    }
+    console.log('yStart: ' + this._ystart);
 
     this._imageWidth = (this._boxWidth + 5 * this._fretWidth);
     this._imageHeight = (this._boxHeight + this._ystart + this._fretWidth + this._fretWidth);
+    console.log('imageHeight: ' + this._imageHeight);
 
     this._signWidth = (this._fretWidth * 0.75);
     this._signRadius = this._signWidth / 2;
@@ -211,34 +247,7 @@ export class ChordBoxImage {
     }
   };
 
-
-  createImage(ctx: any, layout: string) {
-    this._ctx = ctx;
-    this.fillRectangle(this._backgroundBrush, 0, 0, this._imageWidth, this._imageHeight);
-    if (this._error) {
-      //Draw red x
-      // var errorPen = pen('red', 3);
-      this.drawLine('red', 3, 0, 0, this._imageWidth, this._imageHeight);
-      this.drawLine('red', 3, 0, this._imageHeight, this._imageWidth, 0);
-    } else {
-      if (typeof layout === 'undefined' || layout === '1') {
-        this.drawChordBox();
-        this.drawBars();
-        this.drawChordPositionsAndFingers();
-        //this.drawChordName();
-        this.drawStringNames();
-      } else if (layout === '2') {
-        this.drawChordBox();
-        this.drawChordPositions();
-        this.drawBars();
-        //this.drawChordName();
-        this.drawFingers();
-      }
-    }
-  };
-
   drawChordBox() {
-    let pen = this.pen(this._foregroundBrush, this._lineWidth);
     let totalFretWidth = this._fretWidth + this._lineWidth;
 
     for (var i = 0; i <= this.FRET_COUNT; i++) {
@@ -260,7 +269,6 @@ export class ChordBoxImage {
 
   drawBars() {
     let bars = new Map<string, { 'Str': number, 'Pos': number, 'Length': number, 'Finger': string }>();
-    // let bar: { 'Str': number, 'Pos': number, 'Length': number, 'Finger': string };
 
     for (let i = 0; i < 5; i++) {
       if (this._chordPositions[i] != this.MUTED &&
@@ -282,20 +290,13 @@ export class ChordBoxImage {
       }
     }
 
-    //TODO: figure out why there are two pens here
-    // this.pen(this._foregroundBrush, this._lineWidth * 3);
     var totalFretWidth = this._fretWidth + this._lineWidth;
-    for (let b in bars) {
-      if (bars.hasOwnProperty(b)){
-        let bar = bars.get(b);
-        if (bar) {
-          let xstart = this._xstart + bar['Str'] * totalFretWidth;
-          let xend = xstart + bar['Length'] * totalFretWidth;
-          let y = this._ystart + (bar['Pos'] - this._baseFret + 1) * totalFretWidth - (totalFretWidth / 2);
-          // this.pen(this._foregroundBrush, this._dotWidth / 2);
-          this.drawLine(this._foregroundBrush, this._dotWidth / 2, xstart, y, xend, y);
-        }
-      }
+    for (let [finger, bar] of bars) {
+        console.log('if');
+        let xstart = this._xstart + bar['Str'] * totalFretWidth;
+        let xend = xstart + bar['Length'] * totalFretWidth;
+        let y = this._ystart + (bar['Pos'] - this._baseFret + 1) * totalFretWidth - (totalFretWidth / 2);
+        this.drawLine(this._foregroundBrush, this._dotWidth / 2, xstart, y, xend, y);
     }
   };
 
@@ -313,7 +314,6 @@ export class ChordBoxImage {
         let ypos = relativePos * totalFretWidth + yoffset;
         this.fillCircle(this._foregroundBrush, xpos, ypos,this._dotWidth);
       } else if (absolutePos == this.OPEN) {
-        // let pen = Pen(this._foregroundBrush,this._lineWidth);
         let ypos =this._ystart -this._fretWidth;
         let markerXpos = xpos + ((this._dotWidth -this._markerWidth) / 2);
         if (this._baseFret == 1) {
@@ -321,7 +321,6 @@ export class ChordBoxImage {
         }
         this.drawCircle(this._foregroundBrush,this._lineWidth, markerXpos, ypos,this._markerWidth);
       } else if (absolutePos == this.MUTED) {
-        //let pen = Pen(this._foregroundBrush,this._lineWidth * 1.5);
         let ypos =this._ystart -this._fretWidth;
         let markerXpos = xpos + ((this._dotWidth -this._markerWidth) / 2);
         if (this._baseFret == 1) {
@@ -332,7 +331,6 @@ export class ChordBoxImage {
       }
     }
   };
-
 
   drawChordPositionsAndFingers() {
     let yoffset =this._ystart -this._fretWidth;
@@ -418,9 +416,6 @@ export class ChordBoxImage {
   };
 
   drawChordName() {
-
-    // let nameFont = Font(FONT_NAME,this._nameFontSize);
-    // let superFont = Font(FONT_NAME,this._superScriptFontSize);
     let name;
     let supers;
     if (this._chordName.indexOf('_') == -1) {
@@ -441,12 +436,18 @@ export class ChordBoxImage {
     if (supers != "") {
       this.drawString(supers, this.FONT_NAME,this._foregroundBrush, xTextStart + 0.8 * stringSize.Width, 0, this._superScriptFontSize);
     }
-
-    if (this._baseFret > 1) {
-      // let fretFont = Font(FONT_NAME,this._fretFontSize);
-      let offset = (this._fretFontSize -this._fretWidth) / 2;
-      this.drawString(this._baseFret + "fr", this.FONT_NAME, this._foregroundBrush,this._xstart +this._boxWidth + 0.4 *this._fretWidth,this._ystart - offset,this._fretFontSize);
-    }
   };
+
+  drawBaseFret(): void {
+    if (this._baseFret > 1) {
+      let offset = (this._fretFontSize -this._fretWidth) / 2;
+      this.drawString(this._baseFret + "fr",
+        this.FONT_NAME,
+        this._foregroundBrush,
+        this._xstart + this._boxWidth + (0.4 * this._fretWidth) + 5,
+        this._ystart - offset,
+        this._fretFontSize);
+    }
+  }
 
 }
