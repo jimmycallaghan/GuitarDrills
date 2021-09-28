@@ -57,10 +57,11 @@ export class ChordPracticeComponent implements OnInit {
 
   chordsUpdatedSubject = new Subject<void>();
 
-  selectedKey: string = '';
+  selectedKey: string = 'None';
   keys: string[] = [];
 
   constructor(private chordService: ChordsService) {
+    this.keys.push('None');
     chordService.keys.forEach((chords, key) => {
       this.keys.push(key);
     });
@@ -282,7 +283,11 @@ export class ChordPracticeComponent implements OnInit {
   }
 
   onKeySelect(): void {
-    this.selectedChords = this.chordService.keys.get(this.selectedKey)?.map(cd => cd.name);
+    if (this.selectedKey === 'None') {
+      this.selectedChords = this.chords.slice();
+    } else {
+      this.selectedChords = this.chordService.keys.get(this.selectedKey)?.map(cd => cd.name);
+    }
   }
 
 }
